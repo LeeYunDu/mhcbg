@@ -1,0 +1,42 @@
+const { VITE_PROJECT_BASE, VITE_APP_BASE_JAVA_API, VITE_APP_NODE_API } = import.meta.env
+
+export const BaseConfig = {
+  portalBaseUrl: `/${String(VITE_PROJECT_BASE)}`,
+  domain: window.origin
+}
+
+// api代理
+export const ApiProxy = {
+  java: {
+    // 主应用
+    main: VITE_APP_BASE_JAVA_API
+  },
+  node: {
+    // 主应用
+    main: VITE_APP_NODE_API
+  }
+}
+
+export const App = {
+  domain: location.origin
+}
+
+// 当前项目相关
+export default {
+  project: {
+    id: 421,
+    name: '问卷管理平台',
+    cacheView: true,
+    meta: {
+      // 用到的文件夹id集合
+      folders: []
+    }
+  },
+  component: {
+    prefix: 'el-'
+  },
+  iconfont: {
+    prefix: 'iconfont'
+  },
+  dictData: {}
+}

@@ -1,0 +1,38 @@
+// Element Plus 默认蓝色主题
+:root[data-theme="default"] {
+  // 主色调
+  --el-color-primary: #409EFF;
+  --el-color-primary-light-3: #79bbff;
+  --el-color-primary-light-5: #a0cfff;
+  --el-color-primary-light-7: #c6e2ff;
+  --el-color-primary-light-8: #d9ecff;
+  --el-color-primary-light-9: #ecf5ff;
+  --el-color-primary-dark-2: #337ecc;
+  
+  // 其他功能色
+  --el-color-success: #67c23a;
+  --el-color-warning: #e6a23c;
+  --el-color-danger: #f56c6c;
+  --el-color-info: #909399;
+  
+  // 背景色
+  --bg-color: #ffffff;
+  --bg-color-page: #f2f3f5;
+  --bg-color-overlay: #ffffff;
+
+  // page
+  --page-main-padding: 20px 24px 24px 24px;
+  
+  // 侧边栏
+  --sidebar-bg-color: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 78%, #ECF4FF 100%);
+  --sidebar-text-color: #676767;
+  --sidebar-active-color: rgba(27, 136, 253, 0.12);
+  --sidebar-hover-color: rgba(27, 136, 253, 0.12);
+  --sidebar-text-color-active: #409EFF;
+  --sidebar-text-color-hover: #409EFF;
+  --sidebar-width: 220px;
+
+  --header-bg-color: var(--el-color-primary);
+  --header-title-color: #ffffff;
+  --page-header-height: 60px;
+}

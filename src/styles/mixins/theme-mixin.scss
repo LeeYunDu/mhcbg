@@ -1,0 +1,19 @@
+// 主题相关的混入
+@mixin theme-bg-color($property: background-color) {
+  #{$property}: var(--bg-color);
+}
+
+@mixin theme-color($property: color) {
+  #{$property}: var(--text-color-primary);
+}
+
+@mixin theme-border($property: border-color) {
+  #{$property}: var(--border-color);
+}
+
+// 响应式主题
+@mixin dark-theme {
+  [data-theme="dark"] & {
+    @content;
+  }
+}

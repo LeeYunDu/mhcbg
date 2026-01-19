@@ -1,0 +1,89 @@
+// 党建红主题
+:root[data-theme="red"] {
+  // 主色调 - 红色系
+  --el-color-primary: #E5625D;
+  --el-color-primary-light-3: #d63031;
+  --el-color-primary-light-5: #e74c3c;
+  --el-color-primary-light-7: #fd79a8;
+  --el-color-primary-light-8: #fab1a0;
+  --el-color-primary-light-9: #ffeaa7;
+  --el-color-primary-dark-2: #b71540;
+  
+  // 辅助色 - 金色
+  --el-color-success: #f39c12;  // 金色
+  --el-color-warning: #e67e22;  // 橙色
+  --el-color-danger: #c0392b;   // 深红
+  --el-color-info: #7f8c8d;     // 灰色
+  
+  // 背景色 - 更柔和的红色调
+  --bg-color: #fff5f5;
+  --bg-color-page: #f8f0f0;
+  --bg-color-overlay: #fffafa;
+  
+  // page
+  --page-main-padding: 20px 24px 24px 24px;
+
+  // 文字颜色
+  --text-color-primary: #2c3e50;
+  --text-color-regular: #34495e;
+  --text-color-secondary: #7f8c8d;
+  
+  // 边框颜色
+  --border-color: #e9d4d4;
+  --border-color-light: #f0e1e1;
+  --border-color-lighter: #f5ebeb;
+  --border-color-extra-light: #fbf5f5;
+  
+  // 侧边栏
+  --sidebar-bg-color: #800000;  // 深红色
+  --sidebar-text-color: #676767;
+  --sidebar-active-color: rgba(229, 98, 93, .75);  // 金色
+  --sidebar-hover-color: rgba(229, 98, 93, .5);
+  --sidebar-text-color-active: #ffffff;
+  --sidebar-text-color-hover: #ffffff;
+  --sidebar-width: 220px;
+  
+  // 组件自定义样式
+  .el-button--primary {
+    background: linear-gradient(135deg, #c20c0c, #e74c3c);
+    border: none;
+    
+    &:hover {
+      background: linear-gradient(135deg, #b71540, #d63031);
+    }
+  }
+
+  --header-bg-color: var(--el-color-primary);
+  --header-title-color: #ffffff;
+  --page-header-height: 60px;
+}
+
+
+
+.action-btn {
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: var(--el-color-primary);
+  margin-left: 12px;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid var(--el-color-primary);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 14px;
+
+  &~.action-btn {
+    &::before {
+      content: '';
+      position: absolute;
+      left: -6px;
+      width: 1px;
+      height: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--el-color-primary);
+      display: none;
+    }
+  }
+
+}
