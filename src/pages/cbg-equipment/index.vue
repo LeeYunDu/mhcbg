@@ -118,7 +118,7 @@ let useTableQueryForm = computed(()=>{
 })
 
 async function getTagOptions(){
-  let { status, msg, data } = await nSearchAlgorithmListApi({"pageNum":1,"pageSize":999,"sort":"lastExecuteTime_ASC","sortBy":"lastExecuteTime","sortOrder":"ASC"})
+  let { status, msg, data } = await nSearchAlgorithmListApi({ 'pageNum':1,'pageSize':999,'sort':'lastExecuteTime_ASC','sortBy':'lastExecuteTime','sortOrder':'ASC' })
   if (!(status === 200)) return ElMessage.error(msg)
   state.tagOptions = data.list.map((item:any)=>{
     return {
@@ -162,14 +162,73 @@ const formButtons = ref([
 
 const tableMneuButtons = ref([
   {
-    label:'新增',key:'search',icon:'',click:()=>{
-      state.row = {}
-      state.show = true
+    label:'开启状态刷新',key:'search',icon:'',click:()=>{
+      refreshStatus()
     }
   },
 
 
 ])
+
+// 存储设备列表数据
+let equipmentList:any[] = []
+// 定时任务ID
+let statusUpdateTimer:number | null = null
+
+async function refreshStatus (){
+  // 按更新时间的正序获取最近100条数据
+  let params = {
+    pageNum:1,
+    pageSize:1000,
+    sort:'updateTime_ASC',
+    sortBy:'updateTime',
+    sortOrder:'ASC',
+  }
+  let { success,msg,data }  = await nEquipmentListApi(params)
+
+  if(!success){
+    return ElMessage.error(msg || '刷新状态失败')
+  }
+  // 存储获取到的数据集合
+  equipmentList = data.list
+  console.log(statusUpdateTimer)
+
+  // 如果定时任务已存在，先清除
+  if(statusUpdateTimer){
+    clearTimeout(statusUpdateTimer)
+    statusUpdateTimer = null
+  }
+
+  console.log(equipmentList)
+
+  // 定义递归执行函数
+  const processNextItem = async () => {
+    // 当设备列表为空时，停止执行
+    if(equipmentList.length === 0){
+      console.log('设备列表为空，停止执行')
+      statusUpdateTimer = null
+      return
+    }
+
+    // 每次获取1个数据项
+    const item = equipmentList.shift()
+    if(item) {
+      console.log(item,'item')
+      try {
+        await updateEquipmentStatus(item)
+      } catch (error) {
+        console.error('更新装备状态失败:', error)
+      }
+    }
+
+    // 等待10秒后执行下一次
+    const intervalTime = 10 * 1000 // 10秒 = 1次执行间隔
+    statusUpdateTimer = setTimeout(processNextItem, intervalTime)
+  }
+
+  // 立即开始第一次执行
+  processNextItem()
+}
 
 function showBtns (key:string, row:any):boolean {
   const active:any = {
@@ -236,7 +295,7 @@ async function updateEquipmentStatus (row:any){
     return ElMessage.error(data.msg || '更新状态失败')
   }
   ElMessage.success('操作成功')
-  asyncData()
+  // asyncData()
 }
 
 const onAction = (key:string, row:any) => {
@@ -289,8 +348,8 @@ const onAction = (key:string, row:any) => {
 
 // 根据2个时间戳计算天数
 function getDaysBetweenDates(date1: Date, date2: Date): number {
-  const oneDay = 24 * 60 * 60 * 1000; // 1天的毫秒数
-  const diffInMilliseconds = Math.abs(date2.getTime() - date1.getTime());
+  const oneDay = 24 * 60 * 60 * 1000 // 1天的毫秒数
+  const diffInMilliseconds = Math.abs(date2.getTime() - date1.getTime())
   // 如果小于1的话则返回小时
   if(diffInMilliseconds < oneDay){
     return Math.round(diffInMilliseconds / (60 * 60 * 1000)) + '小时'
@@ -300,21 +359,12 @@ function getDaysBetweenDates(date1: Date, date2: Date): number {
 }
 
 const asyncData = async () => {
-  // const params: GpParam = Object.assign({},  curParams.value || {})
-  // const { status,  msg, data } = await BuildingInfoGetPage(params)
-  // if (!(status===200)) return ElMessage.error(msg)
-  // tableOptions.options.pagination.total = get(data || {}, 'total', 0)
-  // // state.data = data.list
-  // state.data= transformTableData(parseHistoryTableColumns,get(data || {}, 'list', []))
-
-
   const params: any = Object.assign({},  curParams.value || {})
 
   if(params.sort){
     params.sortBy = params.sort.split('_')[0]
     params.sortOrder = params.sort.split('_')[1]
   }
-
 
   const { status, msg, data } = await nEquipmentListApi(params)
   if (!(status===200)) return ElMessage.error(msg)

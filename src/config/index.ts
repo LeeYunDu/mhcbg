@@ -25,7 +25,7 @@ export const App = {
 export default {
   project: {
     id: 421,
-    name: '问卷管理平台',
+    name: '藏宝阁精选',
     cacheView: true,
     meta: {
       // 用到的文件夹id集合

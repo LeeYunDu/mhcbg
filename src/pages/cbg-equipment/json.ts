@@ -16,6 +16,18 @@ export const tableQueryFormFields: FormMode[] = [
     },
   },
   {
+    label: '装备类型', key: 'kindid', type: 'select', options: [
+      { label: '全部', value: '' },
+      { label: '上古玉魄阳', value: '88' },
+      { label: '上古玉魄阴', value: '89' },
+    ],
+    props: {
+      gridItem: { span: 4 },
+      formItem: { required: false },
+      clearable: true,
+    }
+  },
+  {
     label: '装备描述', key: 'sumupTitle', type: 'input',
     props: {
       gridItem: { span: 4 },
@@ -40,13 +52,13 @@ export const tableQueryFormFields: FormMode[] = [
     }
   },
   {
-      label:'标签选择', key:'bySearchTag', type:'select', options:[],
-      props: {
-        gridItem: { span: 4 },
-        formItem: { required: false },
-        clearable: true,
-        filterable: true,
-      }
+    label: '标签选择', key: 'bySearchTag', type: 'select', options: [],
+    props: {
+      gridItem: { span: 4 },
+      formItem: { required: false },
+      clearable: true,
+      filterable: true,
+    }
   },
   {
     label: '排序', key: 'sort', type: 'select', options: [
@@ -56,7 +68,6 @@ export const tableQueryFormFields: FormMode[] = [
       { label: '入库时间正序', value: 'createTime_ASC' },
       { label: '更新时间倒序', value: 'updateTime_DESC' },
       { label: '更新时间正序', value: 'updateTime_ASC' },
-
     ],
     props: {
       gridItem: { span: 4 },
@@ -252,7 +263,7 @@ export const parseHistoryTableColumns = [
       return data ? (data / 100).toFixed(2) : '' + '元'
     }
   },
-  { label: '上架/出售时间', key: 'sellingTime', transform: '{y}-{m}-{d}',type:'slot', slotName:'sellingTime' ,width:'300px'},
+  { label: '上架/出售时间', key: 'sellingTime', transform: '{y}-{m}-{d}', type: 'slot', slotName: 'sellingTime', width: '300px' },
   // { label: '入库时间', key: 'createTime', transform: '{y}-{m}-{d}' },
   // { label: '过期时间', key: 'expireTime', transform: '{y}-{m}-{d}' },
   {
