@@ -119,6 +119,8 @@ export async function batchImportEquipment (data: any[], options: BatchImportEqu
       }
 
       let useParams = convertUnderscoreToCamelCase(e)
+      console.log(useParams,'useParams');
+      
 
       useParams.cbgLink = e.equip_detail_url
       useParams.sellingTime = new Date(useParams.sellingTime || new Date())
@@ -127,14 +129,14 @@ export async function batchImportEquipment (data: any[], options: BatchImportEqu
       useParams.sellingInfoData = JSON.stringify(useParams.sellingInfoData || {})
       useParams.baseAttribute = useParams.descSumupShort || ''
       useParams.sumupTitle = handleHighlight(useParams.highlight) || get(e, 'agg_added_attrs', []).join('  ')
-
+      useParams.highlight = JSON.stringify(useParams.highlight || [])
       useParams.cbgStatus = useParams.status
       useParams.sellerName = useParams.sellerNickname
       useParams.serverId = useParams.serverid
       // 首次上架时间
       useParams.firstOnsaleTime = e.create_time
 
-      
+      useParams.aggAddedAttrs = JSON.stringify(useParams.aggAddedAttrs || [])
       // 数据统计用
       useParams.bySearchTag = options.bySearchTag || ''
       useParams.dataSource = options.dataSource || ''

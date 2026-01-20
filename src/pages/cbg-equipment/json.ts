@@ -8,6 +8,14 @@ import { equipStatusEnum } from '@/enums/cbgEnum'
 // 表单查询字段配置
 export const tableQueryFormFields: FormMode[] = [
   {
+    label:'eid',key:'eids',type:'input',
+     props: {
+      gridItem: { span: 4 },
+      formItem: { required: false },
+      clearable: true,
+    },
+  },
+  {
     label: '服务器', key: 'serverName', type: 'input',
     props: {
       gridItem: { span: 4 },
