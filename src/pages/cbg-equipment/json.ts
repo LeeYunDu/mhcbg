@@ -8,8 +8,8 @@ import { equipStatusEnum } from '@/enums/cbgEnum'
 // 表单查询字段配置
 export const tableQueryFormFields: FormMode[] = [
   {
-    label:'eid',key:'eids',type:'input',
-     props: {
+    label: 'eid', key: 'eids', type: 'input',
+    props: {
       gridItem: { span: 4 },
       formItem: { required: false },
       clearable: true,
@@ -251,17 +251,22 @@ export const parseHistoryTableColumns = [
 
   { label: '图标', key: 'icon', type: 'slot', slotName: 'icon', width: '80px' },
   {
-    label: '服务器名称', key: 'serverName', transform: (data: any, row) => {
+    label: '服务器', key: 'serverName', transform: (data: any, row) => {
       // 服务器名称
-      return row.areaName + ' - ' + row.serverName
-    }
+      return row.serverName
+    },
+    width: '120px'
   },
   // { label: '藏宝阁链接', key: 'cbgH5Url', },
   // { label: '装备描述', key: 'equipDesc', type: 'slot', slotName: 'equipDesc' },
   {
     label: '商品名称', key: 'equipName', transform: (data: any, row) => {
+      if (['88', '89'].includes(row.kindid)) {
+        return row.equipName
+      } else {
+        return row.equipName + ' - ' + row.equipLevel + '级'
+      }
       // 商品名称
-      return row.equipName + ' - ' + row.equipLevel + '级'
     }
   },
   { label: '装备描述', key: 'sumupTitle', type: 'slot', slotName: 'sumupTitle', width: '400px' },
@@ -269,13 +274,18 @@ export const parseHistoryTableColumns = [
     label: '装备价格', key: 'price', transform: (data: any, row) => {
       // 价格分转元
       return data ? (data / 100).toFixed(2) : '' + '元'
-    }
+    },
+    width: '120px'
   },
   { label: '上架/出售时间', key: 'sellingTime', transform: '{y}-{m}-{d}', type: 'slot', slotName: 'sellingTime', width: '300px' },
+
+  {
+    label: '关联标签', key: 'bySearchTag', transform: 'cbg_tag.list', width: '200px'
+  },
   // { label: '入库时间', key: 'createTime', transform: '{y}-{m}-{d}' },
   // { label: '过期时间', key: 'expireTime', transform: '{y}-{m}-{d}' },
   {
-    label: '状态', key: 'status', type: 'slot', slotName: 'status'
+    label: '状态', key: 'status', type: 'slot', slotName: 'status', width: '120px'
   },
   {
     label: '操作',

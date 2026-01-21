@@ -2,7 +2,7 @@ import { ResponseMode } from '@/typings/params'
 import Config from '@/config'
 import { get } from 'lodash-es'
 import { transformToTree } from '@/utils'
-import { jSingleChoose, jMultipleChoose, nDictTreeQuery } from '@/api'
+import { jSingleChoose, jMultipleChoose, nDictTreeQuery, nSearchAlgorithmListApi } from '@/api'
 import { listDeptApi } from '@/api/modules/java.system.dept'
 
 export interface DictMode {
@@ -29,13 +29,18 @@ export function createDictKey (type: number | string) {
 const dictApis = [
   {
     api: nDictTreeQuery,
-    type: 'java',
+    type: 'node',
     params: {
       "pageNum": 1,
       "pageSize": 10,
-      "codes": ['question_item_type', 'questionnaire_score_system', 'question_option_type'].join(',')
+      "codes": [].join(',')
     }
   },
+  {
+    api: nSearchAlgorithmListApi,
+    type: 'node',
+    params: { 'pageNum': 1, 'pageSize': 999, 'sort': 'lastExecuteTime_ASC', 'sortBy': 'lastExecuteTime', 'sortOrder': 'ASC' }
+  }
   // {
   //   api: listDeptApi, // 部门接口
   //   type: 'java',
@@ -112,14 +117,16 @@ const app = {
               })
               break
             case 1:
-              const list2 = data.data
-              const useType = createDictKey('sys_dept')
+              console.log(data, 'data');
+
+              const list2 = data.data.list
+              const useType = createDictKey('cbg_tag')
               const options = list2.map((item: any) => {
                 return {
-                  label: item.deptName,
-                  name: item.deptName,
-                  value: item.deptId,
-                  id: item.deptId,
+                  label: item.searchTag,
+                  name: item.searchTag,
+                  value: item.id,
+                  id: item.id,
                 }
               })
               dictData[useType] = {

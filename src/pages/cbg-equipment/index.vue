@@ -61,6 +61,7 @@
 
 
           <template #sumupTitle="{$row}">
+            <div>{{ $row.descSumupShort }}</div>
             <div v-html="$row.sumupTitle"></div>
           </template>
 
@@ -192,7 +193,6 @@ async function refreshStatus (){
   }
   // 存储获取到的数据集合
   equipmentList = data.list
-  console.log(statusUpdateTimer)
 
   // 如果定时任务已存在，先清除
   if(statusUpdateTimer){
@@ -369,7 +369,13 @@ const asyncData = async () => {
   const { status, msg, data } = await nEquipmentListApi(params)
   if (!(status===200)) return ElMessage.error(msg)
   tableOptions.options.pagination.total = get(data || {}, 'total', 0)
-  state.data = transformTableData(parseHistoryTableColumns,get(data || {}, 'list', []))
+  let useData = get(data || {}, 'list', []).map(e=>{
+    if(e.bySearchTag == 0){
+      e.bySearchTag = '无关联标签'
+    }
+    return e
+  })
+  state.data = transformTableData(parseHistoryTableColumns,useData)
 }
 
 
@@ -377,8 +383,8 @@ function onLoadIconError (icon:string){
   console.log('加载图标失败',icon)
 }
 
-let a = "{\"desc\":\"#r等级 130  五行 火#r防御 +246#r耐久度 349#r锻炼等级 12  镶嵌宝石 翡翠石#r#G#G法防 +144#Y #G敏捷 +38#Y #G魔力 -2#Y#Y#r#c4DBAF4特技：#c4DBAF4笑里藏刀#Y#Y#r#G开运孔数：5孔/5孔#b#G#r符石: 气血 +15 速度 +1.5#n#G#r符石: 气血 +15 速度 +1.5#n#b#G#r符石: 气血 +15 速度 +1.5#n#G#r符石: 气血 +15 速度 +1.5#n#G#r符石: 气血 +15 速度 +1.5#n#G#r星位：法防 +3.5#n#G#r星相互合：耐力 +2#r#cEE82EE符石组合: 暗渡陈仓#r门派条件：无#r部位条件：无#r受到物理攻击时，降低3%所受伤害#Y#r#W制造者：”叼炸天ぐ强化打造#Y#r#Y熔炼效果：#r#Y#r+7防御#Y  \",\"main_attrs\":[[\"防御\",\"+246\"]],\"gem_level\":12,\"hole_num\":5,\"vice_attrs\":[[\"敏捷\",\"+38\"],[\"魔力\",\"-2\"]],\"melt_attrs\":[[\"防御\",\"+7\"]],\"agg_added_attrs\":[\"敏捷 +38 魔力 -2 防御 +7\"],\"extra_desc_sumup_short\":\"\",\"exclude_highlights\":[],\"summary\":\"防御 +246 锻炼12级 开5孔\"}"
-console.log(JSON.parse(a));
+let a = '{"desc":"#r等级 130  五行 火#r防御 +246#r耐久度 349#r锻炼等级 12  镶嵌宝石 翡翠石#r#G#G法防 +144#Y #G敏捷 +38#Y #G魔力 -2#Y#Y#r#c4DBAF4特技：#c4DBAF4笑里藏刀#Y#Y#r#G开运孔数：5孔/5孔#b#G#r符石: 气血 +15 速度 +1.5#n#G#r符石: 气血 +15 速度 +1.5#n#b#G#r符石: 气血 +15 速度 +1.5#n#G#r符石: 气血 +15 速度 +1.5#n#G#r符石: 气血 +15 速度 +1.5#n#G#r星位：法防 +3.5#n#G#r星相互合：耐力 +2#r#cEE82EE符石组合: 暗渡陈仓#r门派条件：无#r部位条件：无#r受到物理攻击时，降低3%所受伤害#Y#r#W制造者：”叼炸天ぐ强化打造#Y#r#Y熔炼效果：#r#Y#r+7防御#Y  ","main_attrs":[["防御","+246"]],"gem_level":12,"hole_num":5,"vice_attrs":[["敏捷","+38"],["魔力","-2"]],"melt_attrs":[["防御","+7"]],"agg_added_attrs":["敏捷 +38 魔力 -2 防御 +7"],"extra_desc_sumup_short":"","exclude_highlights":[],"summary":"防御 +246 锻炼12级 开5孔"}'
+console.log(JSON.parse(a))
 
 asyncData()
 </script>

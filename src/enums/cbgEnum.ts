@@ -1,5 +1,5 @@
 export const equipStatusEnum: Record<number, string> = {
-  0: '上架中',
+  0: '卖家已取回',
   1: '已下架',
   2: '上架中',
   3: '被下单',
