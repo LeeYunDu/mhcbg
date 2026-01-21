@@ -17,7 +17,7 @@ const app = {
   state: () => ({
     system: {},
     loginInfo: {
-      token: sessionStorage.getItem('LOGIN_TOKEN')
+      token: sessionStorage.getItem('CBG_LOGIN_TOKEN')
     } as LoginStoreMode,
     redirect: {
       path: '',
@@ -33,14 +33,14 @@ const app = {
   mutations: {
     SET_LOGIN_INFO (state: any, data: any) {
       const { token } = data || {}
-      const useToken = token || Cookie.get('LOGIN_TOKEN') || ''
+      const useToken = token || Cookie.get('CBG_LOGIN_TOKEN') || ''
       state.loginInfo.token = useToken
-      Cookie.set('LOGIN_TOKEN', useToken, { expires: new Date(Date.now() + 3600000) })
+      Cookie.set('CBG_LOGIN_TOKEN', useToken, { expires: new Date(Date.now() + 3600000) })
     },
 
     CLEAR_LOGIN_INFO (state: any) {
       state.loginInfo = {}
-      Cookie.remove('LOGIN_TOKEN')
+      Cookie.remove('CBG_LOGIN_TOKEN')
     },
 
     SET_LOGIN_REDIRECT (state: any, data: any) {

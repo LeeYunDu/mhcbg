@@ -7,7 +7,7 @@ const user = {
   state: () => ({
     user: JSON.parse(sessionStorage.getItem('user') || '{}'),
     role: JSON.parse(sessionStorage.getItem('role') || '{}'),
-    isLogin: Cookies.get('LOGIN_TOKEN') ? true : false
+    isLogin: Cookies.get('CBG_LOGIN_TOKEN') ? true : false
   }),
 
   getters: {
@@ -44,7 +44,7 @@ const user = {
       Cookies.remove('nick_name')
       Cookies.remove('token_type')
       Cookies.remove('user_id')
-      Cookies.remove('LOGIN_TOKEN')
+      Cookies.remove('CBG_LOGIN_TOKEN')
       sessionStorage.removeItem('user')
       localStorage.clear()
       sessionStorage.clear()
