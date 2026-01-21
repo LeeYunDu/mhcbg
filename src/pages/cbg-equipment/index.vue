@@ -79,6 +79,11 @@
       </div>
     </section>
   </div>
+
+  <ImagesDialog
+    v-model="state.showImagesDialog"
+    :data="state.data"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -93,28 +98,31 @@ import ActionButtons from '@/components/action-button/index.vue'
 import { imgPath, parseTime, transformTableData } from '@/utils'
 import { nDeleteEquipmentApi, nEquipmentDetailApi, nEquipmentListApi, nSearchAlgorithmListApi, nUpdateEquipmentApi } from '@/api'
 import { equipStatusEnum } from '@/enums/cbgEnum'
-import { handleCbgDetailDetail, mhxycbgUrlParse } from './utils'
+import { handleCbgDetailDetail, mhxycbgUrlParse, getDaysBetweenDates } from './utils'
 import Icon from '@/layouts/components/common/icon.vue'
+import ImagesDialog from './components/images-dialog.vue'
 
 let state = reactive({
   data:[] ,
   show:false,
+  showImagesDialog:false,
   total:0,
   row:{},
   tagOptions:[],
+  chooseData:{},
 })
 
 
 const curParams:any = ref({
   pageNum: 1,
-  pageSize: 10,
+  pageSize: 12,
   sort:'sellingTime_DESC',
 })
 
 
 let useTableQueryForm = computed(()=>{
   let useLables:any[] = cloneDeep(tableQueryFormFields)
-  useLables.find((item:any)=>item.key === 'bySearchTag').options = state.tagOptions
+  // useLables.find((item:any)=>item.key === 'bySearchTag').options = state.tagOptions
 
   return useLables
 })
@@ -129,7 +137,7 @@ async function getTagOptions(){
     }
   })
 }
-getTagOptions()
+// getTagOptions()
 function onPageChange (opts:any){
   let { params } = opts
   Object.assign(curParams.value,params)
@@ -168,7 +176,11 @@ const tableMneuButtons = ref([
       refreshStatus()
     }
   },
-
+  {
+    label:'截图模式',key:'search',icon:'',click:()=>{
+      state.showImagesDialog = true
+    }
+  },
 
 ])
 
@@ -347,17 +359,7 @@ const onAction = (key:string, row:any) => {
   actionMap[key] && actionMap[key](row)
 }
 
-// 根据2个时间戳计算天数
-function getDaysBetweenDates(date1: Date, date2: Date): number {
-  const oneDay = 24 * 60 * 60 * 1000 // 1天的毫秒数
-  const diffInMilliseconds = Math.abs(date2.getTime() - date1.getTime())
-  // 如果小于1的话则返回小时
-  if(diffInMilliseconds < oneDay){
-    return Math.round(diffInMilliseconds / (60 * 60 * 1000)) + '小时'
-  }else{
-    return Math.round(diffInMilliseconds / oneDay) + '天'
-  }
-}
+
 
 const asyncData = async () => {
   const params: any = Object.assign({},  curParams.value || {})
@@ -395,4 +397,7 @@ asyncData()
 <style lang="scss" scoped>
 
 
+.table-box{
+  height: 100%;
+}
 </style>

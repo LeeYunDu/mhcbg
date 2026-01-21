@@ -60,7 +60,7 @@ export const tableQueryFormFields: FormMode[] = [
     }
   },
   {
-    label: '标签选择', key: 'bySearchTag', type: 'select', options: [],
+    label: '标签选择', key: 'bySearchTag', type: 'select', options: get(dictData,'dict_cbg_tag.list',[]),
     props: {
       gridItem: { span: 4 },
       formItem: { required: false },

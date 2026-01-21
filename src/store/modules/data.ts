@@ -117,8 +117,6 @@ const app = {
               })
               break
             case 1:
-              console.log(data, 'data');
-
               const list2 = data.data.list
               const useType = createDictKey('cbg_tag')
               const options = list2.map((item: any) => {

@@ -208,3 +208,15 @@ export class mhxycbgUrlParse {
     return result;
   }
 }
+
+// 根据2个时间戳计算天数
+export function getDaysBetweenDates(date1: Date, date2: Date): number {
+  const oneDay = 24 * 60 * 60 * 1000 // 1天的毫秒数
+  const diffInMilliseconds = Math.abs(date2.getTime() - date1.getTime())
+  // 如果小于1的话则返回小时
+  if(diffInMilliseconds < oneDay){
+    return Math.round(diffInMilliseconds / (60 * 60 * 1000)) + '小时'
+  }else{
+    return Math.round(diffInMilliseconds / oneDay) + '天'
+  }
+}
