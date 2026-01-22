@@ -61,8 +61,6 @@ const app = {
       try {
         let result: any
         const data = await uLogin(params)
-        console.log(data)
-
         // 获取用户信息
         Cookie.set('realName', data.realName)
         Cookie.set('token', data.token)
@@ -84,9 +82,12 @@ const app = {
         const { data } = await nLogin(params)
         // 获取用户信息
         Cookie.set('token', data.token)
+        Cookie.set('CBG_LOGIN_TOKEN', data.token)
+
+        commit('SET_LOGIN_INFO', result)
         result = await store.dispatch('getUserInfo')
         result = Object.assign(params || {}, data || {}, { success: true })
-        commit('SET_LOGIN_INFO', result)
+
         return result
       } catch (error) {
         console.log(error)

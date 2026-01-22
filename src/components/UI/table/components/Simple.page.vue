@@ -24,11 +24,11 @@ const props = defineProps({
   layout: { type: String, default: 'prev, pager, next, jumper, slot' }
 })
 
-const emit = defineEmits(['pageChange', 'update:pageNun'])
+const emit = defineEmits(['pageChange', 'update:pageNum'])
 
 const cPage = computed({
   get: () => props.params?.pageNum || props.params?.page,
-  set: page => emit('update:pageNun', page)
+  set: page => emit('update:pageNum', page)
 })
 
 const onPageCurrentChange = value => {

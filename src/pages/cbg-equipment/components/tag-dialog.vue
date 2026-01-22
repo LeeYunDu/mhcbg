@@ -92,7 +92,8 @@ function onClosed () {
 // 详情接口
 async function asyncDetailData(){
   let data = cloneDeep(row.value)
-  data.bySearchTag = 58
+  // 去掉元，乘以100
+  data.price = Number(data.price.replace('元','')) *100
   state.params = data
 }
 

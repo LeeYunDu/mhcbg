@@ -24,6 +24,14 @@ export const tableQueryFormFields: FormMode[] = [
     },
   },
   {
+    label: '装备名称', key: 'equipName', type: 'input',
+    props: {
+      gridItem: { span: 4 },
+      formItem: { required: false },
+      clearable: true,
+    },
+  },
+  {
     label: '装备类型', key: 'kindid', type: 'select', options: [
       { label: '全部', value: '' },
       { label: '上古玉魄阳', value: '88' },
@@ -70,12 +78,14 @@ export const tableQueryFormFields: FormMode[] = [
   },
   {
     label: '排序', key: 'sort', type: 'select', options: [
-      { label: '上架时间倒序', value: 'sellingTime_DESC' },
-      { label: '上架时间正序', value: 'sellingTime_ASC' },
+      { label: '上架时间倒序', value: 'firstOnsaleTime_DESC' },
+      { label: '上架时间正序', value: 'firstOnsaleTime_ASC' },
       { label: '入库时间倒序', value: 'createTime_DESC' },
       { label: '入库时间正序', value: 'createTime_ASC' },
       { label: '更新时间倒序', value: 'updateTime_DESC' },
       { label: '更新时间正序', value: 'updateTime_ASC' },
+      { label: '价格正序', value: 'price_ASC' },
+      { label: '价格倒序', value: 'price_DESC' },
     ],
     props: {
       gridItem: { span: 4 },

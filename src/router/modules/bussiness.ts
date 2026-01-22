@@ -1,35 +1,6 @@
 import { get } from 'lodash-es'
 
 export const bussinessRoutes: Array<any> = [
-  // 问卷系统
-  {
-    path: '/question',
-    name: 'Question',
-    component: () => import('@/layouts/router.vue'),
-    meta: { permission: true, title: '问卷系统', showHeader: true, showSide: true },
-    redirect: '/question/list',
-    children: [
-      {
-        path: 'list',
-        name: 'QuestionList',
-        component: () => import('@/pages/question-element-plus/list.vue'),
-        meta: { permission: true, title: '问卷管理', showHeader: true, showSide: true }
-      },
-      {
-        path: 'question-design',
-        name: 'QuestionDesign',
-        component: () => import('@/pages/question-element-plus/question-design.vue'),
-        meta: { permission: true, title: '问题设计', showHeader: true, showSide: true }
-      },
-      {
-        path: 'questionaire-answer',
-        name: 'QuestionaireAnswer',
-        component: () => import('@/pages/question-element-plus/questionaire-answer.vue'),
-        meta: { permission: true, title: '问卷回答', showHeader: true, showSide: true }
-      },
-
-    ]
-  },
 
 
 ]
@@ -101,7 +72,7 @@ export const cbgSystemRoutes: Array<any> = [
         component: () => import('@/pages/cbg/parse-history.vue'),
         meta: { permission: true, name: '链接解析历史', title: '链接解析历史', showHeader: true, showSide: true }
       },
-       {
+      {
         path: 'search-manage',
         name: 'SearchManage',
         component: () => import('@/pages/cbg/search-manage.vue'),
@@ -129,7 +100,7 @@ export const cbgSystemRoutes: Array<any> = [
 
 export const useBussinessRoutes = () => {
 
-  const routes = [ ...systemRoutes, ...cbgSystemRoutes]
+  const routes = [...systemRoutes, ...cbgSystemRoutes]
   // 处理路由的数据结构，以达到aside侧边栏菜单组件的格式
   const handleRoutes = routes.map((module, index) => {
     const extra = {

@@ -123,8 +123,8 @@ let state = reactive({
 
 const curParams:any = ref({
   pageNum: 1,
-  pageSize: 12,
-  sort:'sellingTime_DESC',
+  pageSize: 10,
+  sort:'firstOnsaleTime_DESC',
 })
 
 
