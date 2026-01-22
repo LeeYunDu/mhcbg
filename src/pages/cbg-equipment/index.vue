@@ -84,6 +84,12 @@
     v-model="state.showImagesDialog"
     :data="state.data"
   />
+
+  <TagDialog
+    v-model="state.showTagDialog"
+    :row="state.row"
+    @reload="asyncData"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -101,11 +107,13 @@ import { equipStatusEnum } from '@/enums/cbgEnum'
 import { handleCbgDetailDetail, mhxycbgUrlParse, getDaysBetweenDates } from './utils'
 import Icon from '@/layouts/components/common/icon.vue'
 import ImagesDialog from './components/images-dialog.vue'
+import TagDialog from './components/tag-dialog.vue'
 
 let state = reactive({
   data:[] ,
   show:false,
   showImagesDialog:false,
+  showTagDialog:false,
   total:0,
   row:{},
   tagOptions:[],
@@ -122,22 +130,10 @@ const curParams:any = ref({
 
 let useTableQueryForm = computed(()=>{
   let useLables:any[] = cloneDeep(tableQueryFormFields)
-  // useLables.find((item:any)=>item.key === 'bySearchTag').options = state.tagOptions
-
   return useLables
 })
 
-async function getTagOptions(){
-  let { status, msg, data } = await nSearchAlgorithmListApi({ 'pageNum':1,'pageSize':999,'sort':'lastExecuteTime_ASC','sortBy':'lastExecuteTime','sortOrder':'ASC' })
-  if (!(status === 200)) return ElMessage.error(msg)
-  state.tagOptions = data.list.map((item:any)=>{
-    return {
-      label:item.searchTag,
-      value:item.id,
-    }
-  })
-}
-// getTagOptions()
+
 function onPageChange (opts:any){
   let { params } = opts
   Object.assign(curParams.value,params)
@@ -152,6 +148,7 @@ function onSearch (){
 let router = useRouter()
 const actionButtons = ref([
   { label:'详情',key:'detail' },
+  { label:'打标签',key:'tag' },
   { label:'更新状态',key:'updateStatus' },
   { label:'删除记录',key:'delete' },
 ])
@@ -181,6 +178,21 @@ const tableMneuButtons = ref([
       state.showImagesDialog = true
     }
   },
+  // {
+  //   label:'打标签',key:'tag',icon:'',click:async ()=>{
+  //     let params = { 'pageNum':1,'pageSize':12,'sort':'sellingTime_DESC','bySearchTag':48,'sumupTitle':'防御','sortBy':'sellingTime','sortOrder':'DESC' }
+  //     let res = await nEquipmentListApi(params)
+  //     if(!res.success){
+  //       return ElMessage.error(res.msg || '获取设备列表失败')
+  //     }
+  //     let list = res.data.list || []
+  //     list.map(e=>{
+  //       e.bySearchTag = 58
+  //       nUpdateEquipmentApi(e)
+  //     })
+
+  //   }
+  // }
 
 ])
 
@@ -212,8 +224,6 @@ async function refreshStatus (){
     clearTimeout(statusUpdateTimer)
     statusUpdateTimer = null
   }
-
-  console.log(equipmentList)
 
   // 定义递归执行函数
   const processNextItem = async () => {
@@ -247,7 +257,9 @@ function showBtns (key:string, row:any):boolean {
   const active:any = {
     'detail':true,
     'delete':true,
-    'updateStatus': true
+    'updateStatus': true,
+    'tag':true
+
   }
   return active[key]
 }
@@ -314,8 +326,10 @@ async function updateEquipmentStatus (row:any){
 const onAction = (key:string, row:any) => {
   const actionMap:any = {
     'updateStatus': async ()=>{
-
       await updateEquipmentStatus(row)
+    },
+    'tag': async ()=>{
+      state.showTagDialog = true
     },
     'detail':async ()=>{
       if(row.serverId == 0){
@@ -360,7 +374,6 @@ const onAction = (key:string, row:any) => {
 }
 
 
-
 const asyncData = async () => {
   const params: any = Object.assign({},  curParams.value || {})
 
@@ -388,8 +401,6 @@ function onLoadIconError (icon:string,e:any){
 
 }
 
-let a = '{"desc":"#r等级 130  五行 火#r防御 +246#r耐久度 349#r锻炼等级 12  镶嵌宝石 翡翠石#r#G#G法防 +144#Y #G敏捷 +38#Y #G魔力 -2#Y#Y#r#c4DBAF4特技：#c4DBAF4笑里藏刀#Y#Y#r#G开运孔数：5孔/5孔#b#G#r符石: 气血 +15 速度 +1.5#n#G#r符石: 气血 +15 速度 +1.5#n#b#G#r符石: 气血 +15 速度 +1.5#n#G#r符石: 气血 +15 速度 +1.5#n#G#r符石: 气血 +15 速度 +1.5#n#G#r星位：法防 +3.5#n#G#r星相互合：耐力 +2#r#cEE82EE符石组合: 暗渡陈仓#r门派条件：无#r部位条件：无#r受到物理攻击时，降低3%所受伤害#Y#r#W制造者：”叼炸天ぐ强化打造#Y#r#Y熔炼效果：#r#Y#r+7防御#Y  ","main_attrs":[["防御","+246"]],"gem_level":12,"hole_num":5,"vice_attrs":[["敏捷","+38"],["魔力","-2"]],"melt_attrs":[["防御","+7"]],"agg_added_attrs":["敏捷 +38 魔力 -2 防御 +7"],"extra_desc_sumup_short":"","exclude_highlights":[],"summary":"防御 +246 锻炼12级 开5孔"}'
-console.log(JSON.parse(a))
 
 asyncData()
 </script>

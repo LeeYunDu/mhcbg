@@ -9,7 +9,7 @@
     @confirm="onConfirm"
   >
     <UiForm
-      v-bind="state.parseUrlFormOptions"
+      v-bind="state.tagFormOptions"
       ref="formRef"
       :model="state.params"
     >
@@ -21,10 +21,10 @@
 import SimpleDialog from '@/components/simple-components/simple-dialog/simple-dialog.vue'
 import { UiForm } from '@/components/UI/form'
 import { reactive, ref, computed } from 'vue'
-
 import { ElMessage } from 'element-plus'
-import { get } from 'lodash-es'
-import { nCreateSearchAlgorithmApi, nUpdateSearchAlgorithmApi } from '@/api'
+import { cloneDeep, get } from 'lodash-es'
+import { useStore } from 'vuex'
+import { nUpdateEquipmentApi } from '@/api'
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
   row: { type: Object, default: () => ({}) }
@@ -33,69 +33,42 @@ const props = defineProps({
 const emits = defineEmits([ 'update:modelValue', 'update:row','update:model', 'reload' ])
 const formRef = ref(null)
 const row = computed(() => props.row || {})
+let store = useStore()
+
 const state = reactive({
   show: computed({
     get: () => {
-      state.title = row.value.id ? '编辑搜索算法' : '新增搜索算法'
-      if (row.value.id) {
-        state.params =  Object.assign({},state.params, row.value)
+      // 弹窗打开时，如果row有id，则请求详情
+      if(props.modelValue && get(props.row, 'id')){
+        asyncDetailData()
       }
       return props.modelValue
     },
     set: val => emits('update:modelValue', val)
   }),
-  title:'新增搜索算法',
+  title: '标签管理' ,
   data: {},
   params:{
     fileUrl:'',
     richText:''
   },
-  parseUrlFormOptions: {
+  tagFormOptions: {
     labels: [
       {
-        label: '搜索标签', key: 'searchTag', type: 'input',
+        label: '关联标签', key: 'bySearchTag', type: 'select' ,options:
+        [{
+          label:'无',
+          value:0
+        },...get(store.getters.dictData,'dict_cbg_tag.list',[])],
+
         props: {
           gridItem: { span: 24 },
           formItem: { required: true },
           clearable: true,
+          filterable: true,
         },
       },
-      {
-        label:'标签类型',key:'tagType',type:'select',options:[
-          { label:'玉魄',value:'normal' },
-          { label:'装备',value:'normal' },
-          { label:'武器',value:'normal' },
-          { label:'瞬法',value:'system' },
-          { label:'鼓舞',value:'system' },
-          { label:'壁垒',value:'system' },
-          { label:'',value:'system' },
-        ],
-        props: {
-          gridItem: { span: 24 },
-          formItem: { required: false },
-          clearable: true,
-        },
-      },
-      {
-        label: '说明', key: 'description', type: 'input',
-        props: {
-          gridItem: { span: 24 },
-          formItem: { required: true },
-          clearable: true,
-          rows:3,
-          type:'textarea',
-        },
-      },
-      {
-        label: 'fetch（node格式）请求', key: 'fetch', type: 'input',
-        props: {
-          gridItem: { span: 24 },
-          formItem: { required: true },
-          clearable: true,
-          type:'textarea',
-          rows:8,
-        },
-      },
+
     ],
     props: {
       inline: false,
@@ -109,7 +82,6 @@ const state = reactive({
       gridItem: { span: 24 }
     }
   }
-
 })
 
 function onClosed () {
@@ -117,14 +89,24 @@ function onClosed () {
   emits('update:row', {})
 }
 
+// 详情接口
+async function asyncDetailData(){
+  let data = cloneDeep(row.value)
+  data.bySearchTag = 58
+  state.params = data
+}
 
 async function onConfirm (cb) {
   try {
     await formRef.value?.validate()
-    let useApi = row.value.id ? nUpdateSearchAlgorithmApi : nCreateSearchAlgorithmApi
-    const { status, msg, data } = await useApi( state.params)
+    let handleApi = nUpdateEquipmentApi
+    const { status, msg, data } = await handleApi(Object.assign(
+      {},
+      state.params,
+    ))
     if (!(status===200)) throw new Error(msg)
-    ElMessage.success(state.title+'成功!')
+
+    ElMessage.success('操作成功!')
     emits('update:modelValue', false)
     // 发送指令，刷新列表
     emits('reload')

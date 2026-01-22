@@ -60,7 +60,7 @@ export const tableQueryFormFields: FormMode[] = [
     }
   },
   {
-    label: '标签选择', key: 'bySearchTag', type: 'select', options: get(dictData,'dict_cbg_tag.list',[]),
+    label: '标签选择', key: 'bySearchTag', type: 'select', options: get(dictData, 'dict_cbg_tag.list', []),
     props: {
       gridItem: { span: 4 },
       formItem: { required: false },
@@ -260,7 +260,7 @@ export const parseHistoryTableColumns = [
   // { label: '藏宝阁链接', key: 'cbgH5Url', },
   // { label: '装备描述', key: 'equipDesc', type: 'slot', slotName: 'equipDesc' },
   {
-    label: '商品名称', key: 'equipName', transform: (data: any, row) => {
+    label: '商品名称', key: 'equipName', width: '120px', transform: (data: any, row) => {
       if (['88', '89'].includes(row.kindid)) {
         return row.equipName
       } else {
@@ -292,6 +292,7 @@ export const parseHistoryTableColumns = [
     key: 'action',
     type: 'slot',
     slotName: 'action',
-    width: '210px',
+    width: '250px',
+
   },
 ]

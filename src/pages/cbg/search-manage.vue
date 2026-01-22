@@ -28,8 +28,6 @@
           :data="state.data"
           @page-change="onPageChange"
         >
-     
-
           <template #equipmentCount="{$row}">
             {{ $row.equipmentCount || 0 }}
           </template>
