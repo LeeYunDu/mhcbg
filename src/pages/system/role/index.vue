@@ -22,9 +22,9 @@
     </section>
     <section class="page-main">
       <div class="table-box">
-        <UiTable
+                <UiTable
           v-bind="tableOptions"
-          ref="uiTableRef"
+          :params="curParams"
           :data="state.data"
           @page-change="onPageChange"
         >

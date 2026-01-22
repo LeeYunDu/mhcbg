@@ -17,9 +17,7 @@ export * from './modules/node.login'
 /**
  * node questionnaire, namespace: nQuestionnaire
  */
-export * from './modules/node.questionnaire'
-export * from './modules/node.questionaire-answer'
-export * from './modules/node.question'
+
 
 /** 
  * node project, namespace: nProject

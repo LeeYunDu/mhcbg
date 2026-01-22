@@ -58,3 +58,13 @@ export function nEquipmentDetailApi (params: any): PromiseRo<ResponseMode<any>> 
     params
   })
 }
+
+
+// 批量删除装备
+export function nBatchDeleteEquipmentApi (params: any): PromiseRo<ResponseMode<any>> {
+  return request({
+    url: prefix + '/equipment/batch-delete',
+    type: 'POST',
+    params
+  })
+}

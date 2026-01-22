@@ -258,7 +258,7 @@ export const addFormOptions = {
 
 
 export const parseHistoryTableColumns = [
-
+  { label: '多选框', type: 'selection', key: 'checkbox-group', width: '50' },
   { label: '图标', key: 'icon', type: 'slot', slotName: 'icon', width: '80px' },
   {
     label: '服务器', key: 'serverName', transform: (data: any, row) => {
@@ -279,7 +279,7 @@ export const parseHistoryTableColumns = [
       // 商品名称
     }
   },
-  { label: '装备描述', key: 'sumupTitle', type: 'slot', slotName: 'sumupTitle', width: '400px' },
+  { label: '装备描述', key: 'sumupTitle', type: 'slot', slotName: 'sumupTitle', width: '350px' },
   {
     label: '装备价格', key: 'price', transform: (data: any, row) => {
       // 价格分转元
@@ -290,7 +290,7 @@ export const parseHistoryTableColumns = [
   { label: '上架/出售时间', key: 'sellingTime', transform: '{y}-{m}-{d}', type: 'slot', slotName: 'sellingTime', width: '300px' },
 
   {
-    label: '关联标签', key: 'bySearchTag', transform: 'cbg_tag.list', width: '200px'
+    label: '关联标签', key: 'bySearchTag', transform: 'cbg_tag.list', width: '170px'
   },
   // { label: '入库时间', key: 'createTime', transform: '{y}-{m}-{d}' },
   // { label: '过期时间', key: 'expireTime', transform: '{y}-{m}-{d}' },
@@ -303,6 +303,6 @@ export const parseHistoryTableColumns = [
     type: 'slot',
     slotName: 'action',
     width: '250px',
-
+    fixed: 'right'
   },
 ]

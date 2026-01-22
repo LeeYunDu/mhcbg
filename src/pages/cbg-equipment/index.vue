@@ -24,7 +24,8 @@
       <div class="table-box">
         <UiTable
           v-bind="tableOptions"
-          ref="uiTableRef"
+          v-model:selection="state.selectedRows"
+          :params="curParams"
           :data="state.data"
           @page-change="onPageChange"
         >
@@ -102,7 +103,7 @@ import { useRouter } from 'vue-router'
 import { cloneDeep, get } from 'lodash-es'
 import ActionButtons from '@/components/action-button/index.vue'
 import { imgPath, parseTime, transformTableData } from '@/utils'
-import { nDeleteEquipmentApi, nEquipmentDetailApi, nEquipmentListApi, nSearchAlgorithmListApi, nUpdateEquipmentApi } from '@/api'
+import { nBatchDeleteEquipmentApi, nDeleteEquipmentApi, nEquipmentDetailApi, nEquipmentListApi, nSearchAlgorithmListApi, nUpdateEquipmentApi } from '@/api'
 import { equipStatusEnum } from '@/enums/cbgEnum'
 import { handleCbgDetailDetail, mhxycbgUrlParse, getDaysBetweenDates } from './utils'
 import Icon from '@/layouts/components/common/icon.vue'
@@ -118,6 +119,7 @@ let state = reactive({
   row:{},
   tagOptions:[],
   chooseData:{},
+  selectedRows:[]
 })
 
 
@@ -178,22 +180,69 @@ const tableMneuButtons = ref([
       state.showImagesDialog = true
     }
   },
-  // {
-  //   label:'打标签',key:'tag',icon:'',click:async ()=>{
-  //     let params = { 'pageNum':1,'pageSize':12,'sort':'sellingTime_DESC','bySearchTag':48,'sumupTitle':'防御','sortBy':'sellingTime','sortOrder':'DESC' }
-  //     let res = await nEquipmentListApi(params)
-  //     if(!res.success){
-  //       return ElMessage.error(res.msg || '获取设备列表失败')
-  //     }
-  //     let list = res.data.list || []
-  //     list.map(e=>{
-  //       e.bySearchTag = 58
-  //       nUpdateEquipmentApi(e)
-  //     })
+  {
+    label:'批量打标签',key:'search',icon:'',click:async ()=>{
+      let params ={ 'pageNum':1,'pageSize':1110,'sort':'firstOnsaleTime_DESC','status':'2','equipName':'玉魄','sortBy':'firstOnsaleTime','sortOrder':'DESC' }
+      let res = await nEquipmentListApi(params)
+      if(!res.success){
+        return ElMessage.error(res.msg || '获取设备列表失败')
+      }
+      let list = res.data.list.filter(e=>e.bySearchTag == 0)
 
-  //   }
-  // }
+      list.map(e=>{
 
+        if(e.bySearchTag == 0){
+          // 如果出现2次气血
+          let hxCount = (e.sumupTitle.match(/气血/g) || []).length
+          if(hxCount >= 2){
+            e.bySearchTag = 59
+          }
+
+          let fyCount = (e.sumupTitle.match(/防御/g) || []).length
+          if(fyCount >= 2){
+            e.bySearchTag = 60
+          }
+
+          let fsCount = (e.sumupTitle.match(/法伤/g) || []).length
+          if(fsCount >= 2){
+            e.bySearchTag = 25
+          }
+
+          if(e.sumupTitle.indexOf('气血') > -1 && e.sumupTitle.indexOf('防御') > -1){
+            e.bySearchTag = 58
+          }
+          if(e.sumupTitle.indexOf('防御') > -1 && e.sumupTitle.indexOf('法防') > -1){
+            e.bySearchTag = 47
+          }
+
+          if(e.sumupTitle.indexOf('气血') > -1 && e.sumupTitle.indexOf('法防') > -1){
+            e.bySearchTag = 48
+          }
+
+          if(e.sumupTitle.indexOf('法伤') > -1 && e.sumupTitle.indexOf('法术暴击') > -1){
+            e.bySearchTag = 24
+          }
+        }
+        nUpdateEquipmentApi(e)
+        // e.bySearchTag = 58
+        // nUpdateEquipmentApi(e)
+      })
+
+    }
+  },
+  {
+    label:'批量删除',key:'search',icon:'',click:async ()=>{
+      let params = {
+        eids:state.selectedRows.map(e=>e.eid)
+      }
+      let { success,msg } = await nBatchDeleteEquipmentApi(params)
+      if(!success){
+        return ElMessage.error(msg || '批量删除失败')
+      }
+      ElMessage.success(msg || '批量删除成功')
+      onSearch()
+    }
+  },
 ])
 
 // 存储设备列表数据
@@ -209,7 +258,7 @@ async function refreshStatus (){
     sort:'updateTime_ASC',
     sortBy:'updateTime',
     sortOrder:'ASC',
-    // status:'6'
+    status:'2'
   }
   let { success,msg,data }  = await nEquipmentListApi(params)
 

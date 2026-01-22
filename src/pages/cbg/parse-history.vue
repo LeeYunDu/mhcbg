@@ -24,7 +24,7 @@
       <div class="table-box">
         <UiTable
           v-bind="tableOptions"
-          ref="uiTableRef"
+          :params="curParams"
           :data="state.data"
           @page-change="onPageChange"
         >
@@ -58,7 +58,6 @@
     v-model:row="state.row"
     @reload="asyncData"
   />
-
 </template>
 
 <script lang="ts" setup>

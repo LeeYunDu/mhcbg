@@ -153,7 +153,9 @@ function onTableSelectChange(selection) {
       selectionList.value.push(selectMapDeep)
     })
   }
-  emits('update:selection', selectionList.value || [])
+  console.log(selection)
+
+  emits('update:selection', selection)
 }
 
 function onTableSortChange(params) {
@@ -267,7 +269,7 @@ defineExpose({ table })
       // border: none;
       background-repeat: no-repeat;
       background-size: 100%;
-      background-color: transparent;
+      background-color: white;
 
       td {
         padding: 6px 0 ;
