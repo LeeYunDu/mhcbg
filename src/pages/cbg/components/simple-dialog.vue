@@ -8,7 +8,12 @@
     @closed="onClosed"
     @confirm="onConfirm"
   >
-    传递进来的数据row:{{ row }}
+    <iframe
+      src="https://xyq-m.cbg.163.com/cgi/mweb/equip/77/202511071900113-77-AVHGXDEPIP43Q?refer_sn=019BE4FE-EAE0-EABE-F041-E3808D1F8E9E"
+      frameborder="0"
+      width="100%"
+      height="400px"
+    ></iframe>
   </SimpleDialog>
 </template>
 

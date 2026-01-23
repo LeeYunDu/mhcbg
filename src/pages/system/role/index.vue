@@ -147,14 +147,6 @@ let tableOptions = reactive({
   options:{
     pagination:{
       total:0,
-      mapper:{
-        currentPage:'pageNum',
-      },
-      props:{
-        pageSize:10,
-        pageNum:1,
-        background:true,
-      }
     },
   },
 

@@ -50,6 +50,7 @@
     </el-table>
     <SimplePage
       v-if="showPage"
+      :params="params"
       v-bind="$attrs.options.pagination"
       @page-change="onPageChange"
     />
@@ -81,7 +82,8 @@ const props = defineProps({
   cellStyle: { type: Object, default: () => ({}) },
   selectionKey: { type: [String, Array], default: '' },
   selection: { type: Array, default: () => [] },
-  showPage: { type: Boolean, default: true }
+  showPage: { type: Boolean, default: true },
+  params: { type: Object, default: () => ({}) }
 })
 
 const emits = defineEmits([

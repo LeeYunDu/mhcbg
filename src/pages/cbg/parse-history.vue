@@ -58,6 +58,10 @@
     v-model:row="state.row"
     @reload="asyncData"
   />
+
+  <SimpleDialog
+    v-model="state.showSimpleDialog"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -73,6 +77,7 @@ import { transformTableData } from '@/utils'
 import { nDeleteParseRecordApi, nParseRecordApi } from '@/api'
 import ParseUrlDialog from '@/pages/cbg/components/parse-url-dialog.vue'
 import AddHeaderDialog from '@/pages/cbg/components/add-header-dialog.vue'
+import SimpleDialog from '@/pages/cbg/components/simple-dialog.vue'
 
 
 let state = reactive({
@@ -140,6 +145,12 @@ const tableMneuButtons = ref([
       state.showAddHeaderDialog = true
     }
   },
+  {
+    label:'打开藏宝阁',key:'add',icon:'',click:()=>{
+      state.row = {}
+      state.showSimpleDialog = true
+    }
+  },
 ])
 
 function showBtns (key:string, row:any):boolean {
@@ -167,14 +178,6 @@ let tableOptions = reactive({
   options:{
     pagination:{
       total:0,
-      mapper:{
-        currentPage:'pageNum',
-      },
-      props:{
-        pageSize:10,
-        pageNum:1,
-        background:true,
-      }
     },
   },
   columns:parseHistoryTableColumns,
