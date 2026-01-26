@@ -30,6 +30,12 @@ export function nDeleteEquipmentApi (params: any): PromiseRo<ResponseMode<any>> 
   })
 }
 
+export function nBatchDeleteOldEquipmentApi (): PromiseRo<ResponseMode<any>> {
+  return request({
+    url: prefix + '/equipment/batch-delete-data',
+    type: 'GET',
+  })
+}
 
 // create 装备
 export function nCreateEquipmentApi (params: any): PromiseRo<ResponseMode<any>> {

@@ -27,6 +27,7 @@
           v-model:selection="state.selectedRows"
           :params="curParams"
           :data="state.data"
+          :columns="useTableColumns"
           @page-change="onPageChange"
         >
           <template #icon="{$row}">
@@ -35,7 +36,7 @@
               alt=""
               width="40"
               height="40"
-              @error="(e)=>onLoadIconError(Icon,e)"
+              @error="(e)=>onLoadIconError($row.icon,e)"
             >
           </template>
 
@@ -96,17 +97,16 @@
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { parseHistoryTableColumns, tableQueryFormFields,tableQueryFormOptions } from './json'
+import { parseHistoryTableColumns, previewTableColumns, tableQueryFormFields,tableQueryFormOptions } from './json'
 import { UiTable } from '@/components/UI/table'
 import { UiForm } from '@/components/UI/form'
 import { useRouter } from 'vue-router'
 import { cloneDeep, get } from 'lodash-es'
 import ActionButtons from '@/components/action-button/index.vue'
 import { imgPath, parseTime, transformTableData } from '@/utils'
-import { nBatchDeleteEquipmentApi, nDeleteEquipmentApi, nEquipmentDetailApi, nEquipmentListApi, nSearchAlgorithmListApi, nUpdateEquipmentApi } from '@/api'
+import { nBatchDeleteEquipmentApi, nBatchDeleteOldEquipmentApi, nDeleteEquipmentApi, nEquipmentDetailApi, nEquipmentListApi,  nUpdateEquipmentApi } from '@/api'
 import { equipStatusEnum } from '@/enums/cbgEnum'
 import { handleCbgDetailDetail, mhxycbgUrlParse, getDaysBetweenDates } from './utils'
-import Icon from '@/layouts/components/common/icon.vue'
 import ImagesDialog from './components/images-dialog.vue'
 import TagDialog from './components/tag-dialog.vue'
 
@@ -119,7 +119,8 @@ let state = reactive({
   row:{},
   tagOptions:[],
   chooseData:{},
-  selectedRows:[]
+  selectedRows:[],
+  preview:false
 })
 
 
@@ -155,6 +156,9 @@ const actionButtons = ref([
   { label:'删除记录',key:'delete' },
 ])
 
+let useTableColumns = computed(()=>{
+  return state.preview ? previewTableColumns : parseHistoryTableColumns
+})
 
 const formRef = ref()
 const formButtons = ref([
@@ -170,6 +174,11 @@ const formButtons = ref([
 ])
 
 const tableMneuButtons = ref([
+  {
+    label:'预览模式',key:'search',icon:'',click:()=>{
+      state.preview = true
+    }
+  },
   {
     label:'开启状态刷新',key:'search',icon:'',click:()=>{
       refreshStatus()
@@ -243,6 +252,16 @@ const tableMneuButtons = ref([
       onSearch()
     }
   },
+  // {
+  //   label:'删除上架时间超100天的数据',key:'search',icon:'',click:async ()=>{
+  //     let { success,msg } = await nBatchDeleteOldEquipmentApi()
+  //     if(!success){
+  //       return ElMessage.error(msg || '删除失败')
+  //     }
+  //     ElMessage.success(msg || '删除成功')
+  //     onSearch()
+  //   }
+  // },
 ])
 
 // 存储设备列表数据
@@ -335,7 +354,6 @@ let tableOptions = reactive({
     },
   },
 
-  columns:parseHistoryTableColumns,
 })
 
 async function updateEquipmentStatus (row:any){
@@ -432,12 +450,12 @@ const asyncData = async () => {
     }
     return e
   })
-  state.data = transformTableData(parseHistoryTableColumns,useData)
+  state.data = transformTableData(useTableColumns.value,useData)
 }
 
 
 function onLoadIconError (icon:string,e:any){
-  console.log('加载图标失败',icon,e)
+  console.log('加载图标失败',icon)
   e.target.src = imgPath('cbg/icon/role.webp')
 
 }

@@ -26,7 +26,6 @@ service.interceptors.request.use(config => {
   const isToken = (config.headers || {}).isToken === false
   // 是否需要防止数据重复提交
   const isRepeatSubmit = (config.headers || {}).repeatSubmit === false
-  console.log(getToken(), 'getToken()');
 
   if (getToken() && !isToken) {
     config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
@@ -58,13 +57,14 @@ service.interceptors.request.use(config => {
       const s_data = sessionObj.data              // 请求数据
       const s_time = sessionObj.time              // 请求时间
       const interval = 100                      // 间隔时间(ms)，小于此时间视为重复提交
-      if (s_data === requestObj.data && requestObj.time - s_time < interval && s_url === requestObj.url) {
-        const message = '数据正在处理，请勿重复提交'
-        console.warn(`[${s_url}]: ` + message)
-        return Promise.reject(new Error(message))
-      } else {
-        cache.session.setJSON('sessionObj', requestObj)
-      }
+      // if (s_data === requestObj.data && requestObj.time - s_time < interval && s_url === requestObj.url) {
+      //   const message = '数据正在处理，请勿重复提交'
+      //   console.warn(`[${s_url}]: ` + message)
+      //   return Promise.reject(new Error(message))
+      // } else {
+      // }
+      cache.session.setJSON('sessionObj', requestObj)
+
     }
   }
   return config

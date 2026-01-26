@@ -80,7 +80,6 @@ export async function batchImportEquipment (data: any[], options: BatchImportEqu
     eids: data.map((item: any) => item.eid).join(','),
   })
   let dbkindIds = dbData.data?.list?.map((equip: any) => equip.kindid) || []
-  console.log(dbkindIds);
 
   let dbList = dbData.data?.list || []
   let dbEids = dbList.map((equip: any) => equip.eid)
@@ -103,6 +102,8 @@ export async function batchImportEquipment (data: any[], options: BatchImportEqu
     let dbItem = dbMap.find((db: any) => db.eid == item.eid)
     return dbItem.kindid != item.kindid || dbItem.price != item.price || dbItem.status != item.status || item.firstOnsaleTime != dbItem.firstOnsaleTime 
   })
+  // 最后过滤掉 item.dataStatus == '0', 表示数据正在使用，没被删除
+  
   console.log('需要更新的设备', updateList);
 
   // 需要新增的数据
@@ -119,7 +120,6 @@ export async function batchImportEquipment (data: any[], options: BatchImportEqu
       }
 
       let useParams = convertUnderscoreToCamelCase(e)
-      console.log(useParams,'useParams');
       
 
       useParams.cbgLink = e.equip_detail_url

@@ -306,3 +306,35 @@ export const parseHistoryTableColumns = [
     fixed: 'right'
   },
 ]
+
+
+export const previewTableColumns = [
+  { label: '图标', key: 'icon', type: 'slot', slotName: 'icon', width: '80px' },
+  {
+    label: '服务器', key: 'serverName', transform: (data: any, row) => {
+      // 服务器名称
+      return row.serverName
+    },
+    width: '120px'
+  },
+  {
+    label: '商品名称', key: 'equipName', width: '120px', transform: (data: any, row) => {
+      if (['88', '89'].includes(row.kindid)) {
+        return row.equipName
+      } else {
+        return row.equipName + ' - ' + row.equipLevel + '级'
+      }
+      // 商品名称
+    },
+    width: '150px'
+  },
+  { label: '装备描述', key: 'sumupTitle', type: 'slot', slotName: 'sumupTitle' },
+  {
+    label: '装备价格(元)', key: 'price', transform: (data: any, row) => {
+      // 价格分转元
+      return data ? (data / 100).toFixed(2) : '' + '元'
+    },
+    width: '150px'
+  },
+  { label: '上架/出售时间', key: 'sellingTime', transform: '{y}-{m}-{d}', type: 'slot', slotName: 'sellingTime' },
+]
